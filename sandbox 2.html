@@ -61,14 +61,35 @@
 
 <div id="wordPairsContainer"></div>
 
-<script>
-  const wordPairs = [
-    { original: 'Hallo', translation: 'Привет' },
-    { original: 'Guten Tag', translation: 'Добрый день' },
-   
-  ];
+<script>  
 
-  // Function to create HTML elements for each word pair
+function fetchWordPairs() {
+    const request = new XMLHttpRequest();
+    request.open("GET", "https://raw.githubusercontent.com/rbua/wb/main/words.txt", false);
+    request.send(null);
+
+    const data = request.responseText;
+
+    const lines = data.split('\n');
+    const fetchedWordPairs = [];
+
+    lines.forEach(line => {
+      if (line.includes(' - ')) {
+        const parts = line.split(' - ');
+
+        if (parts.length === 2) {
+          const original = parts[0].trim();
+          const translation = parts[1].trim();
+
+          fetchedWordPairs.push({ original, translation });
+        }
+      }
+    });
+
+    return fetchedWordPairs;
+   }
+   
+
   function createWordPairElements(wordPair) {
     const wordPairContainer = document.createElement('div');
     wordPairContainer.className = 'word_pair_container';
@@ -76,10 +97,10 @@
     const wordPairContent = document.createElement('div');
     wordPairContent.className = 'word_pair_content';
 
-    const originalSpeakerButton = createSpeakerButton();
+    const originalSpeakerButton = createSpeakerButton(wordPairContent, 'original_text_speaker_button');
     const originalWordContainer = createWordContainer(wordPair.original, 'word');
     const translationWordContainer = createWordContainer(wordPair.translation, 'translation');
-    const translationSpeakerButton = createSpeakerButton();
+    const translationSpeakerButton = createSpeakerButton(wordPairContent, 'translation_text_speaker_button');;
 
     wordPairContent.appendChild(originalSpeakerButton);
     wordPairContent.appendChild(originalWordContainer);
@@ -92,13 +113,32 @@
     return wordPairContainer;
   }
 
-  // Function to create a speaker button
-  function createSpeakerButton() {
+  function speakText(textToSpeech, languageOfSpeech) {
+      const utterance = new SpeechSynthesisUtterance(textToSpeech);
+      utterance.lang = languageOfSpeech;
+      utterance.rate = 0.5;
+      speechSynthesis.speak(utterance);
+    }
+
+  function createSpeakerButton(container, className) {
     const speakerButton = document.createElement('div');
-    speakerButton.className = 'original_text_speaker_button';
+    speakerButton.className = className;
     const speakerIcon = document.createElement('img');
     speakerIcon.src = 'resources/speaker_icon.svg';
     speakerIcon.alt = 'Speaker Icon';
+
+    // Add click event to show alert with the text of the associated word container
+    speakerButton.addEventListener('click', function () {
+      const wordContainer = container.querySelector('.word');
+      const translationContainer = container.querySelector('.translation');
+
+      if (this.classList.contains('original_text_speaker_button')) {
+        speakText(wordContainer.textContent, 'de-DE');
+      } else if (this.classList.contains('translation_text_speaker_button', 'ru-RU')) {
+        speakText(translationContainer.textContent);
+      }
+    });
+
     speakerButton.appendChild(speakerIcon);
     return speakerButton;
   }
@@ -127,7 +167,9 @@
     return lineElement;
   }
 
-  // Append each word pair to the page
+  let wordPairs = fetchWordPairs();
+
+
   const wordPairsContainer = document.getElementById('wordPairsContainer');
   wordPairs.forEach(wordPair => {
     const wordPairElement = createWordPairElements(wordPair);

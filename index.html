@@ -74,6 +74,15 @@ function fetchWordPairs() {
     const fetchedWordPairs = [];
 
     lines.forEach(line => {
+      if(line === null || line === ''){
+          return;
+      }
+
+      var pattern = /^([^]+) - ([^]+)$/;
+      if (!pattern.test(line)) {
+          alert("Line does not match the pattern: " + line);
+      }
+          
       if (line.includes(' - ')) {
         const parts = line.split(' - ');
 
@@ -153,8 +162,15 @@ function fetchWordPairs() {
 
     // Add click event to toggle blur effect
     wordElement.addEventListener('click', function () {
+      var elements = document.querySelectorAll('.translation');
+      elements.forEach(function(element) {
+        element.classList.remove('clicked');
+      });
+
       this.classList.add('clicked');
     });
+
+
 
     wordContainer.appendChild(wordElement);
     return wordContainer;

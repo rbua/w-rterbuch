@@ -116,7 +116,7 @@ function fetchWordPairs() {
   function speakText(textToSpeech, languageOfSpeech) {
       const utterance = new SpeechSynthesisUtterance(textToSpeech);
       utterance.lang = languageOfSpeech;
-      utterance.rate = 0.5;
+      utterance.rate = 0.3;
       speechSynthesis.speak(utterance);
     }
 

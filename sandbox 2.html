@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    .word_pair_container {
+      margin-bottom: 10px;
+    }
+
+    .word_pair_content {
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+    }
+
+    .original_text_speaker_button,
+    .translation_text_speaker_button {
+      border: 2px solid #ccc;
+      border-radius: 50%;
+      padding: 5px;
+      margin-right: 5px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+    }
+
+    .original_text_speaker_button img,
+    .translation_text_speaker_button img {
+      width: 20px;
+      height: 20px;
+    }
+
+    .word_container {
+      flex-grow: 1;
+    }
+
+    .translation {
+      font-weight: 600;
+      margin-right: 5px;
+      cursor: pointer;
+      filter: blur(5px); /* Apply initial blur effect */
+      transition: filter 0.5s ease-in-out;
+    }
+
+    .line {
+      height: 2px;
+      background-color: #ccc;
+      margin: 0 5px;
+    }
+
+    /* Remove blur effect on click */
+    .translation.clicked {
+      filter: blur(0);
+    }
+  </style>
+</head>
+<body>
+
+<div id="wordPairsContainer"></div>
+
+<script>
+  const wordPairs = [
+    { original: 'Hallo', translation: 'Привет' },
+    { original: 'Guten Tag', translation: 'Добрый день' },
+   
+  ];
+
+  // Function to create HTML elements for each word pair
+  function createWordPairElements(wordPair) {
+    const wordPairContainer = document.createElement('div');
+    wordPairContainer.className = 'word_pair_container';
+
+    const wordPairContent = document.createElement('div');
+    wordPairContent.className = 'word_pair_content';
+
+    const originalSpeakerButton = createSpeakerButton();
+    const originalWordContainer = createWordContainer(wordPair.original, 'word');
+    const translationWordContainer = createWordContainer(wordPair.translation, 'translation');
+    const translationSpeakerButton = createSpeakerButton();
+
+    wordPairContent.appendChild(originalSpeakerButton);
+    wordPairContent.appendChild(originalWordContainer);
+    wordPairContent.appendChild(createLineElement());
+    wordPairContent.appendChild(translationWordContainer);
+    wordPairContent.appendChild(translationSpeakerButton);
+
+    wordPairContainer.appendChild(wordPairContent);
+
+    return wordPairContainer;
+  }
+
+  // Function to create a speaker button
+  function createSpeakerButton() {
+    const speakerButton = document.createElement('div');
+    speakerButton.className = 'original_text_speaker_button';
+    const speakerIcon = document.createElement('img');
+    speakerIcon.src = 'resources/speaker_icon.svg';
+    speakerIcon.alt = 'Speaker Icon';
+    speakerButton.appendChild(speakerIcon);
+    return speakerButton;
+  }
+
+  // Function to create a word container
+  function createWordContainer(text, className) {
+    const wordContainer = document.createElement('div');
+    wordContainer.className = 'word_container';
+    const wordElement = document.createElement('div');
+    wordElement.className = className;
+    wordElement.textContent = text;
+
+    // Add click event to toggle blur effect
+    wordElement.addEventListener('click', function () {
+      this.classList.add('clicked');
+    });
+
+    wordContainer.appendChild(wordElement);
+    return wordContainer;
+  }
+
+  // Function to create a line element
+  function createLineElement() {
+    const lineElement = document.createElement('div');
+    lineElement.className = 'line';
+    return lineElement;
+  }
+
+  // Append each word pair to the page
+  const wordPairsContainer = document.getElementById('wordPairsContainer');
+  wordPairs.forEach(wordPair => {
+    const wordPairElement = createWordPairElements(wordPair);
+    wordPairsContainer.appendChild(wordPairElement);
+  });
+</script>
+
+</body>
+</html>

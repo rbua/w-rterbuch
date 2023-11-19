@@ -88,14 +88,14 @@
     }
 
     #eyeIcon.closed {
-      content: url('https://raw.githubusercontent.com/rbua/wb/main/resources/eye-closed.svg');
+      content: url('https://raw.githubusercontent.com/rbua/wb/main/resources/eye-opened.svg');
     }
   </style>
 </head>
 <body>
 
 <div class="floating-button" id="floatingButton">
-  <img src="https://raw.githubusercontent.com/rbua/wb/main/resources/eye-opened.svg" alt="Eye icon" id="eyeIcon">
+  <img src="https://raw.githubusercontent.com/rbua/wb/main/resources/eye-closed.svg" alt="Eye icon" id="eyeIcon">
 </div>
 
 <div id="wordPairsContainer"></div>
@@ -116,14 +116,14 @@ document.addEventListener('DOMContentLoaded', function () {
       elements.forEach(function (element) {
         element.classList.remove('clicked');
       });
-      eyeIcon.classList.toggle('closed');
+      eyeIcon.classList.remove('closed');
     }
     else
     {
       elements.forEach(function (element) {
         element.classList.add('clicked');
       });
-      eyeIcon.classList.remove('closed');
+      eyeIcon.classList.toggle('closed');
     }
   });
 });

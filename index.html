@@ -60,7 +60,7 @@
       position: fixed;
       bottom: 20px;
       right: 20px;
-      background-color: #007bff; /* Change to your preferred background color */
+      background-color: #76b7fc; /* Change to your preferred background color */
       color: #fff; /* Change to your preferred text color */
       border: none;
       border-radius: 50%;
@@ -74,19 +74,19 @@
     }
 
     #eyeIcon {
-      width: 24px; /* Adjust the width of the eye icon */
-      height: 24px; /* Adjust the height of the eye icon */
+      width: 24px;
+      height: 24px;
     }
 
     #eyeIcon.closed {
-      content: url('eye-closed.svg'); /* Path to the closed eye SVG */
+      content: url('https://raw.githubusercontent.com/rbua/wb/main/resources/eye-closed.svg');
     }
   </style>
 </head>
 <body>
 
 <div class="floating-button" id="floatingButton">
-  <img src="eye-opened.svg" alt="Eye icon" id="eyeIcon">
+  <img src="https://raw.githubusercontent.com/rbua/wb/main/resources/eye-opened.svg" alt="Eye icon" id="eyeIcon">
 </div>
 
 <div id="wordPairsContainer"></div>
@@ -99,16 +99,23 @@ document.addEventListener('DOMContentLoaded', function () {
   floatingButton.addEventListener('click', function () {
     var floatingButton = document.getElementById('floatingButton');
     var eyeIcon = document.getElementById('eyeIcon');
-
     var elements = document.querySelectorAll('.translation');
-    elements.forEach(function (element) {
-      element.classList.add('clicked');
-      eyeIcon.classList.toggle('closed');
 
-    // var elements = document.querySelectorAll('.translation');
-    // elements.forEach(function (element) {
-    //   element.classList.remove('clicked');
-    });
+    var isClosed = eyeIcon.classList.contains('closed');
+    if(isClosed)
+    {
+      elements.forEach(function (element) {
+        element.classList.remove('clicked');
+      });
+      eyeIcon.classList.remove('closed');
+    }
+    else
+    {
+      elements.forEach(function (element) {
+        element.classList.add('clicked');
+      });
+      eyeIcon.classList.toggle('closed');
+    }
   });
 });
 

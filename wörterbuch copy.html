@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text-to-Speech</title>
+</head>
+<body>
+
+<button onclick="speakGerman()">Speak German</button>
+
+<script>
+function speakGerman() {
+    const germanText = "Letzte Woche habe ich viel erlebt. Am Montag hatte ich einen geschäftigen Arbeitstag. Am Dienstag traf ich mich mit Freunden zum Abendessen. Mittwoch und Donnerstag waren ruhig, aber am Freitag hatte ich ein aufregendes Abenteuer. Am Wochenende habe ich mich entspannt und Zeit mit meiner Familie verbracht.";
+
+    if ('speechSynthesis' in window) {
+        const synth = window.speechSynthesis;
+        const utterance = new SpeechSynthesisUtterance(germanText);
+
+        utterance.lang = 'de-DE';
+
+        const germanVoice = synth.getVoices().find(voice => voice.lang === 'de-DE');
+        if (germanVoice) {
+            utterance.voice = germanVoice;
+        }
+
+        utterance.rate = 0.3;
+
+        synth.speak(utterance);
+    } else {
+        alert('Sorry, your browser does not support the Web Speech API.');
+    }
+}
+</script>
+
+</body>
+</html>
